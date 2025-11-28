@@ -139,4 +139,72 @@ export class LinkedList {
     }
     return result || "Empty list";
   }
+
+  //------- Methods for extra credit -------//
+  insertAt(value, index) {
+    if (value === null || value === undefined) {
+      throw new Error("Cannot insert null or undefined value");
+    }
+
+    if (index < 0 || index > this.size) {
+      console.error("Index out of bounds");
+      return;
+    }
+
+    if (typeof index !== "number" || !Number.isInteger(index)) {
+      throw new Error("Index must be an integer");
+    }
+
+    if (index === 0) {
+      this.prepend(value);
+      return;
+    }
+
+    const newNode = new Node(value);
+    let previous = null;
+    let current = this._head;
+    let count = 0;
+
+    while (count < index) {
+      previous = current;
+      current = current.nextNode;
+      count++;
+    }
+    newNode.nextNode = current;
+    previous.nextNode = newNode;
+    this._size++;
+  }
+
+  removeAt(index) {
+    if (index < 0 || index >= this._size) {
+      throw new Error(
+        `Index ${index} out of bounds. Must be between 0 and ${this._size - 1}`
+      );
+    }
+
+    if (typeof index !== "number" || !Number.isInteger(index)) {
+      throw new Error("Index must be an integer");
+    }
+
+    if (!this._head) {
+      throw new Error("Cannot remove from empty list");
+    }
+    let removedNode;
+    //Remove head node
+    if (index === 0) {
+      removedNode = this._head;
+      this._head = this._head.nextNode;
+    } else {
+      // Remove middle or tail node
+      let previous = this._head;
+      for (let i = 0; i < index - 1; i++) {
+        previous = previous.nextNode;
+      }
+      removedNode = previous.nextNode;
+      previous.nextNode = removedNode.nextNode;
+    }
+
+    this._size--;
+    return removedNode;
+  }
 }
